@@ -5,106 +5,88 @@
   <meta charset="UTF-8">
   <title>Мега Бонуска</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.3/dist/index.umd.js"></script>
   <style>
     body {
-      background: #0a0a0a;
-      color: #fff;
+      margin: 0;
+      padding: 0;
+      background: #111;
       font-family: 'Arial Black', sans-serif;
+      color: white;
       text-align: center;
-      overflow-x: hidden;
     }
-
     h1 {
-      margin-top: 30px;
-      font-size: 28px;
       color: gold;
+      font-size: 28px;
+      margin-top: 20px;
     }
-
     #chances {
-      margin-top: 10px;
       font-size: 20px;
+      margin-bottom: 10px;
     }
-
     .slot-container {
       position: relative;
       width: 300px;
       height: 150px;
-      margin: 30px auto;
-      border: 3px solid gold;
-      border-radius: 10px;
+      margin: 20px auto;
       overflow: hidden;
-      background: #111;
+      border: 4px solid gold;
+      border-radius: 10px;
+      background: #222;
     }
-
     .reel {
       position: absolute;
       width: 100%;
-      transition: transform 10s ease-in-out;
+      top: 0;
     }
-
     .slot-item {
       height: 50px;
       line-height: 50px;
-      font-size: 18px;
-      background: #222;
-      border-top: 1px solid #444;
+      font-size: 20px;
       color: white;
+      background: #333;
+      border-top: 1px solid #444;
     }
-
     .arrow {
       position: absolute;
-      right: -25px;
       top: 50%;
-      transform: translateY(-50%) rotate(180deg);
-      font-size: 40px;
+      right: -20px;
+      transform: translateY(-50%);
+      font-size: 30px;
       color: lime;
-      z-index: 10;
     }
-
-    #spinBtn {
+    button {
       font-size: 18px;
-      background: linear-gradient(90deg, #ff416c, #ff4b2b);
-      color: white;
-      padding: 12px 28px;
+      padding: 10px 25px;
       border: none;
       border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    #claimBtn {
-      display: none;
-      font-size: 18px;
-      background: linear-gradient(90deg, #ff416c, #ff4b2b);
-      color: white;
-      padding: 12px 28px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-
-    #promoText {
-      display: none;
-      color: #00ff00;
-      font-size: 16px;
       margin-top: 15px;
+      cursor: pointer;
     }
-
+    #spinBtn {
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      color: white;
+    }
+    #claimBtn {
+      background: red;
+      color: white;
+      display: none;
+    }
+    #promoText {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #00ff00;
+      font-weight: bold;
+      display: none;
+    }
     .fireworks {
       position: fixed;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       top: 0;
       left: 0;
-      z-index: 9999;
-    }
-
-    .fireworks canvas {
-      width: 100%;
-      height: 100%;
+      z-index: 999;
     }
   </style>
 </head>
@@ -118,25 +100,16 @@
   </div>
 
   <button id="spinBtn">КРУТИТЬ</button>
-  <button id="claimBtn" onclick="window.location.href='https://lkhq.cc/24e8'">ЗАБРАТЬ БОНУС</button>
-
-  <div id="promoText">Сделайте депозит на <b>1WIN</b> от <b>2 000 ₽</b> и получите <b>ШАНС X2</b>!</div>
+  <button id="claimBtn">ЗАБРАТЬ БОНУС</button>
+  <div id="promoText">Сделайте депозит на <b>1WIN</b> от <b>2 000 ₽</b> и получите <b>ШАНС X2!</b></div>
   <div class="fireworks" id="fireworks"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.3/dist/index.umd.js"></script>
   <script>
-    const reel = document.getElementById("reel");
-    const spinBtn = document.getElementById("spinBtn");
-    const claimBtn = document.getElementById("claimBtn");
-    const promoText = document.getElementById("promoText");
-    const attempts = document.getElementById("attempts");
-    const fireworksEl = document.getElementById("fireworks");
-
-    const allPrizes = [
-      "ШАНС Х2",
+    const prizes = [
       "25 FP",
       "+500% К ДЕПОЗИТУ",
       "БОНУСКА ЗА 30 000₽",
+      "ШАНС Х2",
       "+220% К ДЕПОЗИТУ",
       "ВАУЧЕР НА 10 000₽",
       "500 FP",
@@ -144,72 +117,72 @@
       "50 FP"
     ];
 
-    function createSlots() {
-      reel.innerHTML = "";
-      const repeatCount = 50;
-      for (let i = 0; i < repeatCount; i++) {
-        const item = document.createElement("div");
-        item.className = "slot-item";
-        item.textContent = allPrizes[i % allPrizes.length];
-        reel.appendChild(item);
-      }
+    const reel = document.getElementById('reel');
+    const spinBtn = document.getElementById('spinBtn');
+    const claimBtn = document.getElementById('claimBtn');
+    const promoText = document.getElementById('promoText');
+    const fireworksContainer = document.getElementById('fireworks');
+    const attemptsEl = document.getElementById('attempts');
 
-      const item = document.createElement("div");
-      item.className = "slot-item";
-      item.textContent = "ШАНС Х2";
-      reel.appendChild(item);
-    }
+    const slotHeight = 50;
+    const visibleIndex = 1;
 
-    createSlots();
-
-    const fw = new Fireworks.default(fireworksEl, {
+    const fireworks = new Fireworks.default(fireworksContainer, {
       autoresize: true,
-      opacity: 0.9,
+      opacity: 0.8,
       acceleration: 1.05,
-      friction: 0.98,
-      gravity: 1.5,
-      particles: 300,
-      trace: 5,
-      explosion: 4,
+      friction: 0.95,
+      gravity: 1.2,
+      particles: 150,
+      trace: 4,
+      explosion: 5,
       intensity: 40,
-      brightness: { min: 55, max: 80 },
-      decay: { min: 0.01, max: 0.02 },
+      brightness: { min: 50, max: 90 },
+      decay: { min: 0.015, max: 0.03 },
     });
 
-    spinBtn.onclick = () => {
-      if (+attempts.innerText === 0) return;
-
-      const slotHeight = 50;
-      const visibleSlotIndex = 1;
-      const totalSlots = reel.children.length;
-      const delay = 10000;
-
-      let targetIndex = -1;
-      for (let i = visibleSlotIndex + 20; i < totalSlots; i++) {
-        if (reel.children[i].innerText === "ШАНС Х2") {
-          targetIndex = i;
-          break;
-        }
+    // заполняем слоты
+    const generateSlots = () => {
+      reel.innerHTML = '';
+      for (let i = 0; i < 100; i++) {
+        const item = document.createElement('div');
+        item.className = 'slot-item';
+        item.innerText = prizes[i % prizes.length];
+        reel.appendChild(item);
       }
+    };
 
-      if (targetIndex === -1) targetIndex = totalSlots - 1;
+    generateSlots();
 
-      const offset = -(targetIndex - visibleSlotIndex) * slotHeight;
+    spinBtn.onclick = () => {
+      if (parseInt(attemptsEl.innerText) <= 0) return;
+      spinBtn.disabled = true;
 
-      reel.style.transition = `transform ${delay / 1000}s cubic-bezier(0.1, 0.9, 0.4, 1)`;
+      const children = Array.from(reel.children);
+      const targetIndex = children.findIndex((el, i) =>
+        el.innerText.trim() === "ШАНС Х2" && i > 20
+      );
+
+      const offset = -((targetIndex - visibleIndex) * slotHeight) + 1;
+
+      reel.style.transition = "transform 10s cubic-bezier(0.2, 0.9, 0.3, 1)";
       reel.style.transform = `translateY(${offset}px)`;
 
-      spinBtn.disabled = true;
-      attempts.innerText = "0";
-
       setTimeout(() => {
-        fw.start();
-        claimBtn.style.display = "inline-block";
-        promoText.style.display = "block";
-        spinBtn.style.display = "none";
+        claimBtn.style.display = 'inline-block';
+        promoText.style.display = 'block';
+        spinBtn.style.display = 'none';
+        fireworks.start();
+        setTimeout(() => {
+          fireworks.stop();
+        }, 4000);
+      }, 10000);
 
-        setTimeout(() => fw.stop(), 4000);
-      }, delay);
+      attemptsEl.innerText = "0";
+    };
+
+    claimBtn.onclick = () => {
+      window.location.href = "https://lkhq.cc/24e8";
     };
   </script>
 </body>
