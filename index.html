@@ -123,15 +123,9 @@
   <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.3/dist/index.umd.js"></script>
   <script>
     const prizes = [
-      "25 FP",
-      "+500% К ДЕПОЗИТУ",
-      "БОНУСКА ЗА 30 000₽",
-      "+220% К ДЕПОЗИТУ",
-      "ВАУЧЕР НА 10 000₽",
-      "500 FP",
-      "БОНУСКА ЗА 10 000₽",
-      "50 FP",
-      "ШАНС Х2" // Последний в списке
+      "25 FP", "+500% К ДЕПОЗИТУ", "БОНУСКА ЗА 30 000₽",
+      "+220% К ДЕПОЗИТУ", "ВАУЧЕР НА 10 000₽", "500 FP",
+      "БОНУСКА ЗА 10 000₽", "50 FP", "ШАНС Х2"
     ];
 
     const reel = document.getElementById("reel");
@@ -142,23 +136,23 @@
     const fireworksEl = document.getElementById("fireworks");
 
     const slotHeight = 50;
-    const visibleIndex = 1; // Центральная позиция
+    const visibleIndex = 1;
 
     const fw = new Fireworks.default(fireworksEl, {
       autoresize: true,
       opacity: 0.9,
-      acceleration: 1.1,
-      friction: 0.95,
-      gravity: 1.5,
-      particles: 150,
-      trace: 6,
-      explosion: 5,
-      intensity: 50
+      acceleration: 1.05,
+      friction: 0.97,
+      gravity: 1.2,
+      particles: 300,
+      trace: 8,
+      explosion: 8,
+      intensity: 65
     });
 
     function populateSlots() {
       reel.innerHTML = '';
-      const repeat = 50;
+      const repeat = 60;
       for (let i = 0; i < repeat; i++) {
         const prize = prizes[i % prizes.length];
         const div = document.createElement('div');
@@ -171,36 +165,33 @@
     populateSlots();
 
     spinBtn.onclick = () => {
-      const attempts = parseInt(attemptsEl.innerText);
-      if (attempts <= 0) return;
-
+      if (parseInt(attemptsEl.innerText) <= 0) return;
       spinBtn.disabled = true;
 
       const allItems = reel.children;
       let targetIndex = -1;
 
-      for (let i = visibleIndex; i < allItems.length; i++) {
+      for (let i = visibleIndex + 20; i < allItems.length; i++) {
         if (allItems[i].textContent.trim() === "ШАНС Х2") {
           targetIndex = i;
           break;
         }
       }
 
-      // Вычисляем смещение, с учётом небольшой корректировки
-      const offset = -((targetIndex - visibleIndex) * slotHeight) + 3;
+      const correction = 3;
+      const offset = -((targetIndex - visibleIndex) * slotHeight) + correction;
 
-      reel.style.transition = "transform 10s cubic-bezier(0.1, 0.7, 0.3, 1)";
+      reel.style.transition = "transform 12s cubic-bezier(0.1, 0.6, 0.1, 1)";
       reel.style.transform = `translateY(${offset}px)`;
 
-      // Финальные действия
       setTimeout(() => {
         fw.start();
         promoText.style.display = 'block';
         claimBtn.style.display = 'inline-block';
         spinBtn.style.display = 'none';
 
-        setTimeout(() => fw.stop(), 4000);
-      }, 10000);
+        setTimeout(() => fw.stop(), 6000);
+      }, 12000);
 
       attemptsEl.innerText = "0";
     };
