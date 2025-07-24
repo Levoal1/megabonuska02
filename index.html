@@ -5,102 +5,90 @@
   <meta charset="UTF-8">
   <title>Мега Бонуска</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
-      background: #0d0d0d;
+      margin: 0;
+      padding: 0;
       font-family: 'Arial Black', sans-serif;
-      color: white;
+      background: #111;
+      color: #fff;
       text-align: center;
-      padding: 20px;
     }
-
     h1 {
+      margin-top: 20px;
+      font-size: 28px;
       color: gold;
-      font-size: 32px;
     }
-
     #chances {
-      margin: 10px 0;
       font-size: 20px;
+      margin-bottom: 10px;
     }
-
     .slot-container {
       position: relative;
-      margin: 20px auto;
-      width: 320px;
+      width: 300px;
       height: 150px;
+      margin: 20px auto;
       overflow: hidden;
       border: 4px solid gold;
       border-radius: 10px;
-      background: #1a1a1a;
+      background: #222;
     }
-
     .arrow {
       position: absolute;
       top: 50%;
       right: -25px;
       transform: translateY(-50%) rotate(180deg);
-      font-size: 40px;
+      font-size: 35px;
       color: lime;
       z-index: 10;
     }
-
     .reel {
       position: absolute;
       width: 100%;
       top: 0;
     }
-
     .slot-item {
       height: 50px;
       line-height: 50px;
-      font-size: 20px;
+      font-size: 18px;
       background: #333;
       border-top: 1px solid #444;
     }
-
     button {
-      font-size: 18px;
-      padding: 12px 30px;
+      font-size: 20px;
+      padding: 10px 25px;
       border: none;
       border-radius: 8px;
+      background: green;
+      color: white;
       cursor: pointer;
-    }
-
-    #spinBtn {
-      background: linear-gradient(to right, #ff416c, #ff4b2b);
-      color: white;
       margin-top: 20px;
     }
-
-    #claimBtn {
+    .claim-btn {
       background: red;
-      color: white;
-      display: none;
-      margin-top: 20px;
-    }
-
-    #promo-text {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #00ff00;
       display: none;
     }
-
     .fireworks {
       position: fixed;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       top: 0;
       left: 0;
       pointer-events: none;
-      z-index: 1000;
+      z-index: 9999;
     }
-
     .fireworks canvas {
       width: 100%;
       height: 100%;
       display: block;
+    }
+    #promo-text {
+      margin-top: 20px;
+      color: #00ff00;
+      font-size: 18px;
+      display: none;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -114,82 +102,84 @@
   </div>
 
   <button id="spinBtn">КРУТИТЬ</button>
-  <button id="claimBtn">ЗАБРАТЬ БОНУС</button>
+  <button class="claim-btn" id="claimBtn">ЗАБРАТЬ БОНУС</button>
 
-  <div id="promo-text">Сделайте депозит на <b>1WIN</b> от <b>2 000 ₽</b> и получите <b>ШАНС X2</b>!</div>
-
+  <div id="promo-text">Сделайте депозит на <b>1WIN</b> от <b>2 000 ₽</b> и получите <b>ШАНС X2!</b></div>
   <div class="fireworks" id="fireworks"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.3/dist/index.umd.js"></script>
   <script>
-    const prizes = [
-      "25 FP", "+500% К ДЕПОЗИТУ", "БОНУСКА ЗА 30 000₽",
-      "+220% К ДЕПОЗИТУ", "ВАУЧЕР НА 10 000₽", "500 FP",
-      "БОНУСКА ЗА 10 000₽", "50 FP", "ШАНС Х2"
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+
+    const allPrizes = [
+      "50 FP", "100 FP", "+500% К ДЕПОЗИТУ", "ВАУЧЕР НА 10 000₽",
+      "БОНУСКА ЗА 30 000₽", "+220% К ДЕПОЗИТУ", "250FP", "БОНУС 5000₽",
+      "Шанс Х2", "БОНУС 10000₽"
     ];
 
     const reel = document.getElementById("reel");
     const spinBtn = document.getElementById("spinBtn");
     const claimBtn = document.getElementById("claimBtn");
+    const fireworksEl = document.getElementById("fireworks");
     const promoText = document.getElementById("promo-text");
     const attemptsEl = document.getElementById("attempts");
-    const fireworksEl = document.getElementById("fireworks");
 
     const slotHeight = 50;
-    const visibleIndex = 1;
+    const visibleSlotIndex = 1;
+
+    const createSlots = () => {
+      reel.innerHTML = '';
+      for (let i = 0; i < 100; i++) {
+        const item = document.createElement("div");
+        item.className = "slot-item";
+        item.innerText = allPrizes[i % allPrizes.length];
+        reel.appendChild(item);
+      }
+    };
+
+    createSlots();
 
     const fw = new Fireworks.default(fireworksEl, {
       autoresize: true,
       opacity: 0.9,
-      acceleration: 1.05,
-      friction: 0.97,
-      gravity: 1.2,
-      particles: 300,
+      acceleration: 1.1,
+      friction: 0.95,
+      gravity: 1.5,
+      particles: 700,
       trace: 8,
-      explosion: 8,
-      intensity: 65
+      explosion: 10,
+      intensity: 80,
+      brightness: { min: 60, max: 90 },
+      decay: { min: 0.01, max: 0.02 },
     });
-
-    function populateSlots() {
-      reel.innerHTML = '';
-      const repeat = 60;
-      for (let i = 0; i < repeat; i++) {
-        const prize = prizes[i % prizes.length];
-        const div = document.createElement('div');
-        div.className = 'slot-item';
-        div.textContent = prize;
-        reel.appendChild(div);
-      }
-    }
-
-    populateSlots();
 
     spinBtn.onclick = () => {
       if (parseInt(attemptsEl.innerText) <= 0) return;
       spinBtn.disabled = true;
 
-      const allItems = reel.children;
-      let targetIndex = -1;
+      const totalSlots = reel.children.length;
 
-      for (let i = visibleIndex + 20; i < allItems.length; i++) {
-        if (allItems[i].textContent.trim() === "ШАНС Х2") {
+      // выбираем ближайший "Шанс Х2" и ставим его на позицию 2
+      let targetIndex = -1;
+      for (let i = visibleSlotIndex + 20; i < totalSlots; i++) {
+        if (reel.children[i].innerText.trim().toLowerCase() === "шанс х2") {
           targetIndex = i;
           break;
         }
       }
+      if (targetIndex === -1) targetIndex = totalSlots - 1;
 
-      const correction = 3;
-      const offset = -((targetIndex - visibleIndex) * slotHeight) + correction;
+      const offset = -((targetIndex - visibleSlotIndex) * slotHeight);
 
       reel.style.transition = "transform 12s cubic-bezier(0.1, 0.6, 0.1, 1)";
       reel.style.transform = `translateY(${offset}px)`;
 
       setTimeout(() => {
         fw.start();
-        promoText.style.display = 'block';
-        claimBtn.style.display = 'inline-block';
-        spinBtn.style.display = 'none';
-
+        promoText.style.display = "block";
+        claimBtn.style.display = "inline-block";
+        spinBtn.style.display = "none";
         setTimeout(() => fw.stop(), 6000);
       }, 12000);
 
