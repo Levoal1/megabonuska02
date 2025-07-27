@@ -3,7 +3,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Мега Бонуска</title>
+  <title>РњРµРіР° Р‘РѕРЅСѓСЃРєР°</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -16,19 +16,19 @@
 
     h1 {
       margin-top: 30px;
-      font-size: 26px;
+      font-size: 28px;
       color: gold;
       animation: pulse 1.5s infinite;
-      text-shadow: 0 0 10px gold;
+      text-shadow: 0 0 15px gold;
     }
 
     @keyframes pulse {
       0%, 100% { text-shadow: 0 0 10px gold; }
-      50% { text-shadow: 0 0 20px gold; }
+      50% { text-shadow: 0 0 25px gold; }
     }
 
     #chances {
-      font-size: 16px;
+      font-size: 18px;
       margin-top: 10px;
     }
 
@@ -36,20 +36,20 @@
       margin: 30px auto;
       width: 280px;
       height: 150px;
-      border: 2px solid gold;
+      border: 3px solid gold;
       border-radius: 6px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 20px gold;
+      box-shadow: 0 0 25px gold;
     }
 
     .arrow {
       position: absolute;
       top: 50%;
-      right: -16px;
+      right: -18px;
       transform: translateY(-50%);
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       background: url('arrow_fixed.png') no-repeat center;
       background-size: contain;
       z-index: 10;
@@ -65,7 +65,7 @@
     .slot-item {
       height: 50px;
       line-height: 50px;
-      font-size: 16px;
+      font-size: 18px;
       background: #111;
       border-bottom: 1px solid #333;
     }
@@ -79,7 +79,7 @@
       background: linear-gradient(45deg, #ff4e50, #f9d423);
       color: white;
       cursor: pointer;
-      box-shadow: 0 0 10px #f00;
+      box-shadow: 0 0 12px #f00;
     }
 
     .claim-btn {
@@ -98,7 +98,7 @@
       display: none;
       margin-top: 15px;
       color: #00ff00;
-      font-size: 14px;
+      font-size: 16px;
       text-shadow: 0 0 5px lime;
     }
 
@@ -113,26 +113,26 @@
 </head>
 <body>
 
-  <h1>Мега Бонуска</h1>
-  <div id="chances">У вас попыток: <span id="attempts">1</span></div>
+  <h1>РњРµРіР° Р‘РѕРЅСѓСЃРєР°</h1>
+  <div id="chances">РЈ РІР°СЃ РїРѕРїС‹С‚РѕРє: <span id="attempts">1</span></div>
 
   <div class="slot-container">
     <div class="arrow"></div>
     <div class="reel" id="reel"></div>
   </div>
 
-  <button id="spinBtn">КРУТИТЬ</button>
-  <button class="claim-btn" id="claimBtn">ЗАБРАТЬ БОНУС</button>
+  <button id="spinBtn">РљР РЈРўРРўР¬</button>
+  <button class="claim-btn" id="claimBtn">Р—РђР‘Р РђРўР¬ Р‘РћРќРЈРЎ</button>
 
-  <div id="promo-text">Сделайте депозит на <b>1WIN</b> от <b>2 000 ₽</b> и получите <b>ШАНС Х2!</b></div>
+  <div id="promo-text">РЎРґРµР»Р°Р№С‚Рµ РґРµРїРѕР·РёС‚ РЅР° <b>1WIN</b> РѕС‚ <b>2 000 в‚Ѕ</b> Рё РїРѕР»СѓС‡РёС‚Рµ <b>РЁРђРќРЎ РҐ2!</b></div>
   <canvas id="fireworks"></canvas>
 
   <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.3/dist/index.umd.js"></script>
   <script>
     const prizes = [
-      "25 FP", "+500% К ДЕПОЗИТУ", "БОНУСКА ЗА 30.000₽",
-      "+220% К ДЕПОЗИТУ", "ВАУЧЕР НА 10.000₽", "500FP",
-      "БОНУСКА ЗА 10.000₽", "50FP"
+      "25 FP", "+500% Рљ Р”Р•РџРћР—РРўРЈ", "Р‘РћРќРЈРЎРљРђ Р—Рђ 30.000в‚Ѕ",
+      "+220% Рљ Р”Р•РџРћР—РРўРЈ", "Р’РђРЈР§Р•Р  РќРђ 10.000в‚Ѕ", "500FP",
+      "Р‘РћРќРЈРЎРљРђ Р—Рђ 10.000в‚Ѕ", "50FP"
     ];
 
     const reel = document.getElementById("reel");
@@ -147,8 +147,7 @@
 
     function buildSlots() {
       reel.innerHTML = "";
-      // Добавим 10 случайных и в центр ШАНС Х2
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 20; i++) {
         const item = document.createElement("div");
         item.className = "slot-item";
         item.innerText = prizes[i % prizes.length];
@@ -156,9 +155,9 @@
       }
       const winItem = document.createElement("div");
       winItem.className = "slot-item";
-      winItem.innerText = "ШАНС Х2";
+      winItem.innerText = "РЁРђРќРЎ РҐ2";
       reel.appendChild(winItem);
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 20; i++) {
         const item = document.createElement("div");
         item.className = "slot-item";
         item.innerText = prizes[i % prizes.length];
@@ -173,8 +172,8 @@
       spinBtn.disabled = true;
 
       const slotHeight = 50;
-      const visibleIndex = 1; // второй слот
-      const winIndex = 15; // фиксированное место "ШАНС Х2"
+      const visibleIndex = 1;
+      const winIndex = 20;
       const offset = -(winIndex - visibleIndex) * slotHeight;
 
       reel.style.transition = "transform 10s cubic-bezier(0.1, 0.57, 0.1, 1)";
