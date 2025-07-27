@@ -1,11 +1,10 @@
 
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>РњР•Р“Рђ Р‘РћРќРЈРЎРљРђ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МЕГА БОНУСКА</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
@@ -110,18 +109,18 @@
   </style>
 </head>
 <body>
-  <h1>РњР•Р“Рђ Р‘РћРќРЈРЎРљРђ</h1>
-  <div id="chances">РЈ РІР°СЃ РїРѕРїС‹С‚РѕРє: <span id="attempts">1</span></div>
+  <h1>МЕГА БОНУСКА</h1>
+  <div id="chances">У вас попыток: <span id="attempts">1</span></div>
 
   <div class="slot-container">
     <img src="arrow_fixed.png" alt="arrow" class="arrow-img" />
     <div class="reel" id="reel"></div>
   </div>
 
-  <button id="spinBtn">РљР РЈРўРРўР¬</button>
-  <button class="claim-btn" id="claimBtn">Р—РђР‘Р РђРўР¬ Р‘РћРќРЈРЎ</button>
+  <button id="spinBtn">КРУТИТЬ</button>
+  <button class="claim-btn" id="claimBtn">ЗАБРАТЬ БОНУС</button>
 
-  <div id="promo-text">РЎРґРµР»Р°Р№С‚Рµ РґРµРїРѕР·РёС‚ РЅР° 1WIN РѕС‚ 2 000 в‚Ѕ Рё РїРѕР»СѓС‡РёС‚Рµ РЁРђРќРЎ РҐ2</div>
+  <div id="promo-text">Сделайте депозит на 1WIN от 2 000 ₽ и получите ШАНС Х2</div>
   <canvas id="fireworks"></canvas>
 
   <audio id="spin-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c9e0ee37e3.mp3?filename=slot-machine-142180.mp3" preload="auto"></audio>
@@ -129,8 +128,9 @@
   <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.3/dist/index.umd.js"></script>
   <script>
     const prizes = [
-      "25 FP", "+500% Рљ Р”Р•РџРћР—РРўРЈ", "Р‘РћРќРЈРЎРљРђ Р—Рђ 30.000в‚Ѕ", "+220% Рљ Р”Р•РџРћР—РРўРЈ",
-      "Р’РђРЈР§Р•Р  РќРђ 10.000в‚Ѕ", "500FP", "Р‘РћРќРЈРЎРљРђ Р—Рђ 10.000в‚Ѕ", "50FP", "25 FP"
+      "25 FP", "+500% К ДЕПОЗИТУ", "БОНУСКА ЗА 30.000₽",
+      "+220% К ДЕПОЗИТУ", "ВАУЧЕР НА 10.000₽", "500FP",
+      "БОНУСКА ЗА 10.000₽", "50FP", "25 FP"
     ];
 
     const reel = document.getElementById("reel");
@@ -142,47 +142,45 @@
     const canvas = document.getElementById("fireworks");
 
     const fw = new Fireworks.default(canvas, {
-      opacity: 0.8, acceleration: 1.05, friction: 0.98, gravity: 1.5,
-      particles: 180, trace: 6, explosion: 7
+      opacity: 0.8, acceleration: 1.05, friction: 0.98,
+      gravity: 1.5, particles: 180, trace: 6, explosion: 7
     });
 
-   function buildReel() {
-    reel.innerHTML = '';
+    function buildReel() {
+      reel.innerHTML = '';
 
-    // Добавляем 1 слот до выигрыша
-    const first = document.createElement("div");
-    first.className = "slot-item";
-    first.innerText = prizes[0];
-    reel.appendChild(first);
+      // Первый слот — любой
+      const item1 = document.createElement("div");
+      item1.className = "slot-item";
+      item1.innerText = prizes[0];
+      reel.appendChild(item1);
 
-    // Добавляем ШАНС Х2 — он второй
-    const win = document.createElement("div");
-    win.className = "slot-item";
-    win.innerText = "ШАНС Х2";
-    reel.appendChild(win);
+      // Второй — всегда ШАНС Х2
+      const winItem = document.createElement("div");
+      winItem.className = "slot-item";
+      winItem.innerText = "ШАНС Х2";
+      reel.appendChild(winItem);
 
-    // Добавляем остальные слоты
-    for (let i = 0; i < 40; i++) {
-      const item = document.createElement("div");
-      item.className = "slot-item";
-      item.innerText = prizes[i % prizes.length];
-      reel.appendChild(item);
+      // Остальные слоты
+      for (let i = 0; i < 40; i++) {
+        const item = document.createElement("div");
+        item.className = "slot-item";
+        item.innerText = prizes[i % prizes.length];
+        reel.appendChild(item);
+      }
     }
-  }
-
 
     buildReel();
 
     spinBtn.onclick = () => {
       if (parseInt(attemptsEl.innerText) <= 0) return;
-      const targetIndex = 1; // индекс ШАНС Х2
 
       spinBtn.disabled = true;
       spinSound.play();
 
       const slotHeight = 50;
-      const visibleIndex = 1;
-      const targetIndex = 27;
+      const visibleIndex = 1;  // второй слот
+      const targetIndex = 1;   // где у нас ШАНС Х2
       const offset = -(targetIndex - visibleIndex) * slotHeight;
 
       reel.style.transition = "transform 10s cubic-bezier(0.1, 0.57, 0.1, 1)";
