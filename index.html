@@ -2,198 +2,175 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>РњРµРіР° Р‘РѕРЅСѓСЃРєР°</title>
+  <meta charset="UTF-8" />
+  <title>Мега Бонуска</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
       margin: 0;
-      background: #000;
       font-family: 'Arial Black', sans-serif;
+      background: #111;
+      color: white;
       text-align: center;
-      color: #fff;
     }
 
     h1 {
-      margin-top: 30px;
-      font-size: 28px;
+      margin-top: 20px;
+      font-size: 32px;
       color: gold;
       animation: pulse 1.5s infinite;
-      text-shadow: 0 0 15px gold;
     }
 
     @keyframes pulse {
       0%, 100% { text-shadow: 0 0 10px gold; }
-      50% { text-shadow: 0 0 25px gold; }
-    }
-
-    #chances {
-      font-size: 18px;
-      margin-top: 10px;
+      50% { text-shadow: 0 0 20px gold, 0 0 30px gold; }
     }
 
     .slot-container {
-      margin: 30px auto;
-      width: 280px;
-      height: 150px;
-      border: 3px solid gold;
-      border-radius: 6px;
       position: relative;
+      width: 300px;
+      height: 150px;
+      margin: 20px auto;
+      border: 4px solid gold;
+      border-radius: 10px;
+      box-shadow: 0 0 20px gold;
       overflow: hidden;
-      box-shadow: 0 0 25px gold;
-    }
-
-    .arrow {
-      position: absolute;
-      top: 50%;
-      right: -18px;
-      transform: translateY(-50%);
-      width: 32px;
-      height: 32px;
-      background: url('arrow_fixed.png') no-repeat center;
-      background-size: contain;
-      z-index: 10;
+      background: #222;
     }
 
     .reel {
       position: absolute;
-      top: 0;
       width: 100%;
-      transition: transform 10s cubic-bezier(0.1, 0.57, 0.1, 1);
+      top: 0;
+      transition: transform 6s ease-in-out;
     }
 
     .slot-item {
       height: 50px;
       line-height: 50px;
+      font-size: 20px;
+      border-bottom: 1px solid #444;
+      background: #333;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 66px;
+      right: -25px;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 15px solid lime;
+      z-index: 10;
+    }
+
+    .btn {
+      margin-top: 25px;
       font-size: 18px;
-      background: #111;
-      border-bottom: 1px solid #333;
-    }
-
-    #spinBtn {
-      margin-top: 10px;
-      font-size: 16px;
-      padding: 10px 25px;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(45deg, #ff4e50, #f9d423);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 12px #f00;
-    }
-
-    .claim-btn {
-      display: none;
-      margin-top: 20px;
       padding: 10px 20px;
-      background: red;
+      background-color: green;
       color: white;
       border: none;
       border-radius: 6px;
-      font-size: 16px;
       cursor: pointer;
     }
 
-    #promo-text {
-      display: none;
-      margin-top: 15px;
-      color: #00ff00;
-      font-size: 16px;
-      text-shadow: 0 0 5px lime;
+    .btn:disabled {
+      background-color: gray;
     }
 
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 999;
+    .claim-btn {
+      background-color: red;
+      margin-top: 20px;
+      display: none;
+    }
+
+    #promo {
+      color: #00FF00;
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 16px;
+      display: none;
     }
   </style>
 </head>
 <body>
-
-  <h1>РњРµРіР° Р‘РѕРЅСѓСЃРєР°</h1>
-  <div id="chances">РЈ РІР°СЃ РїРѕРїС‹С‚РѕРє: <span id="attempts">1</span></div>
+  <h1>МЕГА БОНУСКА</h1>
+  <div id="attempts">У вас попыток: <span id="chances">1</span></div>
 
   <div class="slot-container">
     <div class="arrow"></div>
-    <div class="reel" id="reel"></div>
+    <div class="reel" id="reel">
+      <!-- Слоты будут сгенерированы скриптом -->
+    </div>
   </div>
 
-  <button id="spinBtn">РљР РЈРўРРўР¬</button>
-  <button class="claim-btn" id="claimBtn">Р—РђР‘Р РђРўР¬ Р‘РћРќРЈРЎ</button>
+  <button class="btn" id="spinBtn">КРУТИТЬ</button>
+  <button class="btn claim-btn" id="claimBtn" onclick="location.href='https://lkhq.cc/24e8'">ЗАБРАТЬ БОНУС</button>
 
-  <div id="promo-text">РЎРґРµР»Р°Р№С‚Рµ РґРµРїРѕР·РёС‚ РЅР° <b>1WIN</b> РѕС‚ <b>2 000 в‚Ѕ</b> Рё РїРѕР»СѓС‡РёС‚Рµ <b>РЁРђРќРЎ РҐ2!</b></div>
-  <canvas id="fireworks"></canvas>
+  <div id="promo">Сделайте депозит на <b>1WIN</b> от <b>2 000 ₽</b> и получите <b>ШАНС Х2!</b></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.3/dist/index.umd.js"></script>
   <script>
+    Telegram.WebApp.ready();
+
     const prizes = [
-      "25 FP", "+500% Рљ Р”Р•РџРћР—РРўРЈ", "Р‘РћРќРЈРЎРљРђ Р—Рђ 30.000в‚Ѕ",
-      "+220% Рљ Р”Р•РџРћР—РРўРЈ", "Р’РђРЈР§Р•Р  РќРђ 10.000в‚Ѕ", "500FP",
-      "Р‘РћРќРЈРЎРљРђ Р—Рђ 10.000в‚Ѕ", "50FP"
+      "25 FP", "+220% К ДЕПОЗИТУ", "БОНУСКА ЗА 10.000₽",
+      "50 FP", "ВАУЧЕР НА 10.000₽", "+500% К ДЕПОЗИТУ"
     ];
 
     const reel = document.getElementById("reel");
     const spinBtn = document.getElementById("spinBtn");
     const claimBtn = document.getElementById("claimBtn");
-    const promoText = document.getElementById("promo-text");
-    const attemptsEl = document.getElementById("attempts");
+    const promo = document.getElementById("promo");
+    const chancesEl = document.getElementById("chances");
 
-    const fw = new Fireworks.default(document.getElementById('fireworks'), {
-      gravity: 1.3, particles: 300, trace: 4, explosion: 5, brightness: { min: 70, max: 90 }
-    });
-
-    function buildSlots() {
+    function generateSlots() {
       reel.innerHTML = "";
-      for (let i = 0; i < 20; i++) {
+      const spins = 5;
+      const total = spins * prizes.length;
+      for (let i = 0; i < total; i++) {
         const item = document.createElement("div");
         item.className = "slot-item";
-        item.innerText = prizes[i % prizes.length];
+        item.textContent = prizes[i % prizes.length];
         reel.appendChild(item);
       }
-      const winItem = document.createElement("div");
-      winItem.className = "slot-item";
-      winItem.innerText = "РЁРђРќРЎ РҐ2";
-      reel.appendChild(winItem);
-      for (let i = 0; i < 20; i++) {
-        const item = document.createElement("div");
-        item.className = "slot-item";
-        item.innerText = prizes[i % prizes.length];
-        reel.appendChild(item);
-      }
+
+      const chanceDiv = document.createElement("div");
+      chanceDiv.className = "slot-item";
+      chanceDiv.textContent = "ШАНС Х2";
+      reel.appendChild(chanceDiv);
+
+      const last = document.createElement("div");
+      last.className = "slot-item";
+      last.textContent = prizes[0];
+      reel.appendChild(last);
     }
 
-    buildSlots();
+    generateSlots();
 
     spinBtn.onclick = () => {
-      if (parseInt(attemptsEl.innerText) <= 0) return;
+      if (parseInt(chancesEl.textContent) <= 0) return;
       spinBtn.disabled = true;
 
       const slotHeight = 50;
       const visibleIndex = 1;
-      const winIndex = 20;
-      const offset = -(winIndex - visibleIndex) * slotHeight;
+      const stopIndex = reel.children.length - 2; // ШАНС Х2
+      const offset = -(stopIndex - visibleIndex) * slotHeight;
 
-      reel.style.transition = "transform 10s cubic-bezier(0.1, 0.57, 0.1, 1)";
       reel.style.transform = `translateY(${offset}px)`;
 
       setTimeout(() => {
+        confetti();
         claimBtn.style.display = "inline-block";
-        promoText.style.display = "block";
+        promo.style.display = "block";
         spinBtn.style.display = "none";
-        fw.start();
-        setTimeout(() => fw.stop(), 5000);
-      }, 10000);
+      }, 6100);
 
-      attemptsEl.innerText = "0";
-    };
-
-    claimBtn.onclick = () => {
-      window.location.href = "https://lkhq.cc/24e8";
+      chancesEl.textContent = "0";
     };
   </script>
-
 </body>
 </html>
